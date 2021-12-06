@@ -109,6 +109,24 @@ pipeline {
 			sh 'python upload-results.py --host 3.81.3.77:80 --api_key 66879c160803596f132aff025fee9a170366f615 --engagement_id 4 --result_file sslyze-output.json --username admin --scanner "SSL Labs Scan"'
 			sh 'python upload-results.py --host 3.81.3.77:80 --api_key 66879c160803596f132aff025fee9a170366f615 --engagement_id 4 --result_file nikto-output.xml --username admin'
 			    
+			             sh '''
+             time=$(date +'%Y-%m-%d')
+           sudo curl --location --request POST 'http://3.135.238.207:8080/api/v2/import-scan/' \
+--header 'Authorization: Token 04a3f27e413800d03838d1d5ac9c5dcdb91e672b' \
+--form 'engagement="1"' \
+--form 'verified="true"' \
+--form 'active="true"' \
+--form 'lead="1"' \
+--form 'tags="test"' \
+--form 'scan_date="2019-04-30"' \
+--form 'scan_type="ZAP Scan"' \
+--form 'minimum_severity="Info"' \
+--form 'skip_duplicates="true"' \
+--form 'close_old_findings="false"' \
+--form 'file=@"/home/ubuntu/workspace/Devsecops/zap_report.xml"'
+
+'''   
+			    
 		    }
 	    }
 	    
