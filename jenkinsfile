@@ -19,6 +19,8 @@ pipeline {
 		sh 'docker pull gesellix/trufflehog'
 		sh 'docker run -t gesellix/trufflehog --json https://github.com/aqilshaikh/webapp.git > trufflehog'
 		sh 'cat trufflehog'
+		sh 'cd .. && cd ccf-ui/ && docker run --rm -v "$(pwd):/proj" dxa4481/trufflehog file:///proj'
+
 	    }
 	    }
 	    
