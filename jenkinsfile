@@ -76,6 +76,30 @@ pipeline {
 			   }
 			}
 		}    
+		
+		stage('ZAP Scan') {
+    steps {
+        script {
+            // Start ZAP container
+            sh 'docker run -d -t --name zap -p 8888:8080 owasp/zap2docker-stable'
+
+            // Wait for ZAP to start
+            sh 'docker exec zap zap.sh -daemon -host 0.0.0.0 -port 8080'
+            sleep 30 // Adjust wait time as needed
+
+            // Run ZAP scan
+            sh 'docker exec zap zap.sh -cmd -quickurl 172.16.1.40:8080/WebGoat -quickprogress -quickout zap.xml'
+
+            // Generate ZAP report
+            sh 'docker exec zap zap.sh -cmd -report html -file zap-report.html -source zap.xml'
+
+            // Stop and remove ZAP container
+            sh 'docker stop zap'
+            sh 'docker rm zap'
+        }
+    }
+}
+
 	
 	    stage ('Nikto Scan') 
         {
